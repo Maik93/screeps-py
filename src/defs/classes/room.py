@@ -2,7 +2,7 @@ from typing import Any, Callable, Dict, List, Optional, Type, Union
 
 # noinspection PyProtectedMember
 from .memory import _Memory
-from .misc_obj import RoomObject
+from .misc_obj import RoomObject, Source
 from .structures import StructureController, StructureStorage, StructureTerminal
 from ..transcrypt import Uint8Array
 
@@ -34,7 +34,8 @@ class RoomPosition:
     def createFlag(self, name: str = None, color: int = None, secondaryColor: int = None) -> Union[str, int]:
         pass
 
-    def findClosestByPath(self, source: _FindParameter, opts: Optional[Dict[str, Any]] = None) -> Optional[RoomObject]:
+    def findClosestByPath(self, source: _FindParameter, opts: Optional[Dict[str, Any]] = None) \
+            -> Optional[Union[RoomObject, Source]]:
         pass
 
     def findClosestByRange(self, source: _FindParameter, opts: Optional[Dict[str, Any]] = None) -> Optional[RoomObject]:

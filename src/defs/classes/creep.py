@@ -3,7 +3,7 @@ from typing import Any, ClassVar, Dict, List, Optional, Union
 from .memory import _Memory
 from .misc_obj import Mineral, Resource, RoomObject, Source
 from .room import Room, RoomPosition, _Owner
-from .structures import ConstructionSite, Structure, StructureController
+from .structures import ConstructionSite, Structure, StructureController, Store
 
 
 class _CreepPart:
@@ -51,6 +51,7 @@ class Creep(RoomObject):
         """
         super().__init__(pos, room)
         self.body = body
+        self.store = Store()
         self.carry = carry
         self.carryCapacity = carryCapacity
         self.fatigue = fatigue

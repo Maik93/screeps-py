@@ -9,6 +9,23 @@ from .room import Room, RoomPosition, _Owner
 
 
 # noinspection PyPep8Naming
+class Store:
+    def __init__(self) -> None:
+        """
+        WARNING: This constructor is purely for type completion, and does not exist in the game.
+        """
+
+    def getCapacity(self, resource=None) -> int:
+        pass
+
+    def getFreeCapacity(self, resource=None) -> int:
+        pass
+
+    def getUsedCapacity(self, resource=None) -> int:
+        pass
+
+
+# noinspection PyPep8Naming
 class Structure(RoomObject):
     """
     :type id: str

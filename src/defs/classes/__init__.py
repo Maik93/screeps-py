@@ -12,7 +12,7 @@ from .room import Room, RoomPosition, _PathPos
 from .structures import ConstructionSite, OwnedStructure, Structure, StructureContainer, StructureController, \
     StructureExtension, StructureExtractor, StructureKeeperLair, StructureLab, StructureLink, StructureNuker, \
     StructureObserver, StructurePortal, StructurePowerBank, StructurePowerSpawn, StructureRampart, StructureRoad, \
-    StructureSpawn, StructureStorage, StructureTerminal, StructureTower, StructureWall
+    StructureSpawn, StructureStorage, StructureTerminal, StructureTower, StructureWall, Store
 
 __all__ = [
     'Creep', 'Game', 'PathFinder', '_', 'Memory', 'RawMemory', '_Memory', '_MemoryValue', 'Flag', 'Mineral', 'Resource',
@@ -23,5 +23,5 @@ __all__ = [
     'StructureExtension', 'StructureExtractor', 'StructureKeeperLair', 'StructureLab', 'StructureLink',
     'StructureNuker', 'StructureObserver', 'StructurePortal', 'StructurePowerBank', 'StructurePowerSpawn',
     'StructureRampart', 'StructureRoad', 'StructureSpawn', 'StructureStorage', 'StructureTerminal', 'StructureTower',
-    'StructureWall'
+    'StructureWall', 'Store'
 ]
