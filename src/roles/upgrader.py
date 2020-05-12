@@ -11,10 +11,10 @@ __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
 
-class Harvester(BaseCreep):
+class Upgrader(BaseCreep):
     """
-    Runs a creep as a generic harvester.
-    It will collect energy from its closest source, then put it on any structure or upgrade the controller if they're full.
+    Runs a creep as an upgrader.
+    It will collect energy from its closest source, then put it on the controller.
     """
 
     def run(self):
@@ -22,7 +22,6 @@ class Harvester(BaseCreep):
         if self.creep.memory.filling and self.creep.store.getFreeCapacity() == 0:
             self.creep.memory.filling = False
             del self.creep.memory.source
-
         # If we're empty, start filling again and remove the saved target
         elif not self.creep.memory.filling and self.creep.store.getUsedCapacity() == 0:
             self.creep.memory.filling = True
@@ -31,4 +30,4 @@ class Harvester(BaseCreep):
         if self.creep.memory.filling:
             self.collect_resource()
         else:
-            self.refill_deposit()
+            self.update_controller()
