@@ -32,13 +32,17 @@ class BaseCreep:
         # If we're near the source, harvest it - otherwise, move to it.
         if self.creep.pos.isNearTo(source):  # TODO: it's better to check isNearTo or try to harvest and check ERR_NOT_IN_RANGE?
             if self.creep.memory.recover_dropped_source:
-                self.creep.pickup(source)
+                result = self.creep.pickup(source)
                 del self.creep.memory.recover_dropped_source
-            result = self.creep.harvest(source)
-            if result != OK:
-                print(f"[{self.creep.name}] Unknown result from creep.harvest({source}): {result}")
+                del self.creep.memory.source
+            else:
+                result = self.creep.harvest(source)
         else:
-            self.creep.moveTo(source)
+            result = self.creep.moveTo(source)
+
+        if result != OK:
+            del self.creep.memory.recover_dropped_source
+            del self.creep.memory.source
 
     def refill_deposit(self):
         # If we have a saved target, use it
@@ -94,6 +98,40 @@ class BaseCreep:
         is_close = self.creep.pos.inRangeTo(target, 3)
         if is_close:
             result = self.creep.upgradeController(target)
+            if result != OK:
+                print("[{}] Unknown result from creep.upgradeController({}): {}".format(
+                    self.creep.name, target, result))
+            # Let the creeps get a little bit closer than required to the controller, to make room for other creeps.
+            if not self.creep.pos.inRangeTo(target, 2):
+                self.creep.moveTo(target)
+        else:
+            self.creep.moveTo(target)
+
+    def work_on_structure(self):
+        # If we have a saved target, use it
+        if self.creep.memory.target:
+            target = Game.getObjectById(self.creep.memory.target)
+        else:
+            # go to the closest incomplete structure
+            target = self.creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES)
+            # otherwise check if there's some structure to repair
+            if target is None:
+                target = self.creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    "filter": lambda s: (s.structureType == STRUCTURE_WALL) or
+                                        (s.structureType == STRUCTURE_RAMPART) or
+                                        (s.structureType == STRUCTURE_CONTAINER) or
+                                        (s.structureType == STRUCTURE_ROAD) and s.hits < s.hitsMax})
+                self.creep.memory.is_repairing = True
+            else:
+                del self.creep.memory.is_repairing
+            self.creep.memory.target = target.id
+
+        is_close = self.creep.pos.inRangeTo(target, 3)
+        if is_close:
+            if self.creep.memory.is_repairing:
+                result = self.creep.repair(target)
+            else:
+                result = self.creep.build(target)
             if result != OK:
                 print("[{}] Unknown result from creep.upgradeController({}): {}".format(
                     self.creep.name, target, result))

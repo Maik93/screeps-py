@@ -3,7 +3,7 @@ from typing import Any, Callable, Dict, List, Optional, Type, Union
 # noinspection PyProtectedMember
 from .memory import _Memory
 from .misc_obj import RoomObject, Source, Resource
-from .structures import StructureController, StructureStorage, StructureTerminal, Structure
+from .structures import StructureController, StructureStorage, StructureTerminal, Structure, ConstructionSite
 from ..transcrypt import Uint8Array
 
 _HasPosition = Union['RoomPosition', 'RoomObject']
@@ -35,7 +35,7 @@ class RoomPosition:
         pass
 
     def findClosestByPath(self, source: _FindParameter, opts: Optional[Dict[str, Any]] = None) \
-            -> Optional[Union[RoomObject, Source, Resource, Structure, StructureController]]:
+            -> Optional[Union[RoomObject, Source, Resource, Structure, StructureController, ConstructionSite]]:
         pass
 
     def findClosestByRange(self, source: _FindParameter, opts: Optional[Dict[str, Any]] = None) -> Optional[RoomObject]:

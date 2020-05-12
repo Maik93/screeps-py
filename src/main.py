@@ -1,6 +1,5 @@
 from defs import *
-from roles.harvester import Harvester
-from roles.upgrader import Upgrader
+from roles.worker import Worker
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -23,12 +22,7 @@ def main():
     # " creeps logic "
     for name in Object.keys(Game.creeps):
         creep = Game.creeps[name]
-        if creep.memory.role == 'upgrader':
-            Upgrader(creep).run()
-        elif creep.memory.role == 'harvester':
-            Harvester(creep).run()
-        else:
-            Harvester(creep).run()
+        Worker(creep).run()
 
     # Run each spawn
     for name in Object.keys(Game.spawns):
@@ -41,11 +35,11 @@ def main():
 
             # If there are no harvesters, spawn a creep once energy is at 250 or more
             if num_harvesters == 0 and spawn.room.energyAvailable >= 250:
-                spawn.createCreep([WORK, CARRY, MOVE, MOVE], None, {'memory': {'role': 'harvester'}})
+                spawn.createCreep([WORK, CARRY, MOVE, MOVE], None, {'role': 'harvester'})
 
             # same for an upgrader
             if num_upgraders == 0 and spawn.room.energyAvailable >= 250:
-                spawn.createCreep([WORK, CARRY, MOVE, MOVE], None, {'memory': {'role': 'upgrader'}})
+                spawn.createCreep([WORK, CARRY, MOVE, MOVE], None, {'role': 'upgrader'})
 
             # If there are less than 15 creeps but at least one, wait until all spawns and extensions are full before spawning
             elif num_creeps < MAX_CREEPS and spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable:
