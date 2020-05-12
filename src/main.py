@@ -1,5 +1,5 @@
-from roles import harvester
 from defs import *
+from roles.harvester import Harvester
 
 # required for Transcrypt
 __pragma__('noalias', 'name')
@@ -25,8 +25,10 @@ def main():
         creep = Game.creeps[name]
         if creep.memory.role == 'upgrader':
             pass
+        elif creep.memory.role == 'harvester':
+            Harvester(creep).run()
         else:
-            harvester.run_harvester(creep)
+            Harvester(creep).run()
 
     # Run each spawn
     for name in Object.keys(Game.spawns):

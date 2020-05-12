@@ -10,24 +10,17 @@ __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
 
-def run_harvester(creep: Creep):
+class BaseCreep:
     """
     Runs a creep as a generic harvester.
     It will collect energy from its closest source, then put it on any structure or upgrade the controller if they're full.
     """
 
-    " decide whether to go to collect sources or to deposit them "
-    # If we're full, stop filling up and remove the saved source
-    if creep.memory.filling and creep.store.getFreeCapacity() == 0:
-        creep.memory.filling = False
-        del creep.memory.source
-    # If we're empty, start filling again and remove the saved target
-    elif not creep.memory.filling and creep.store.getUsedCapacity() == 0:
-        creep.memory.filling = True
-        del creep.memory.target
+    def __init__(self, creep: Creep):
+        self.creep = creep
 
-    " source collection logic "
-    if creep.memory.filling:
+    def _go_to_source_and_collect(self):
+        creep = self.creep
         # If we have a saved source, use it
         if creep.memory.source:
             source = Game.getObjectById(creep.memory.source)  # TODO: store position directly?
@@ -51,8 +44,11 @@ def run_harvester(creep: Creep):
                 print(f"[{creep.name}] Unknown result from creep.harvest({source}): {result}")
         else:
             creep.moveTo(source)
-    else:
-        " target deposit logic "
+
+
+class Harvester(BaseCreep):
+    def _go_to_deposit(self):
+        creep = self.creep
         # If we have a saved target, use it
         if creep.memory.target:
             target = Game.getObjectById(creep.memory.target)
@@ -92,3 +88,22 @@ def run_harvester(creep: Creep):
                     creep.moveTo(target)
         else:
             creep.moveTo(target)
+
+    def run(self):
+        creep = self.creep
+        " decide whether to go to collect sources or to deposit them "
+        # If we're full, stop filling up and remove the saved source
+        if creep.memory.filling and creep.store.getFreeCapacity() == 0:
+            creep.memory.filling = False
+            del creep.memory.source
+        # If we're empty, start filling again and remove the saved target
+        elif not creep.memory.filling and creep.store.getUsedCapacity() == 0:
+            creep.memory.filling = True
+            del creep.memory.target
+
+        " source collection logic "
+        if creep.memory.filling:
+            self._go_to_source_and_collect()
+        else:
+            " target deposit logic "
+            self._go_to_deposit()
