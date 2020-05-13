@@ -27,6 +27,8 @@ class BaseCreep:
             else:
                 # Get the closest source and store it as the chosen one
                 source = self.creep.pos.findClosestByPath(FIND_SOURCES, {"filter": lambda s: s.energy > 0})
+                if source is None:
+                    return
             self.creep.memory.source = source.id
 
         # If we're near the source, harvest it - otherwise, move to it.
@@ -77,8 +79,7 @@ class BaseCreep:
             else:
                 result = self.creep.upgradeController(target)
                 if result != OK:
-                    print("[{}] Unknown result from self.creep.upgradeController({}): {}".format(
-                        self.creep.name, target, result))
+                    print("[{}] Unknown result from self.creep.upgradeController({}): {}".format(self.creep.name, target, result))
                 # Let the creeps get a little bit closer than required to the controller, to make room for other creeps
                 if not self.creep.pos.inRangeTo(target, 2):
                     self.creep.moveTo(target)
@@ -99,8 +100,7 @@ class BaseCreep:
         if is_close:
             result = self.creep.upgradeController(target)
             if result != OK:
-                print("[{}] Unknown result from creep.upgradeController({}): {}".format(
-                    self.creep.name, target, result))
+                print("[{}] Unknown result from creep.upgradeController({}): {}".format(self.creep.name, target, result))
             # Let the creeps get a little bit closer than required to the controller, to make room for other creeps.
             if not self.creep.pos.inRangeTo(target, 2):
                 self.creep.moveTo(target)
@@ -124,6 +124,9 @@ class BaseCreep:
                 self.creep.memory.is_repairing = True
             else:
                 del self.creep.memory.is_repairing
+            if target is None:
+                self.refill_deposit()
+                return
             self.creep.memory.target = target.id
 
         is_close = self.creep.pos.inRangeTo(target, 3)
@@ -133,8 +136,7 @@ class BaseCreep:
             else:
                 result = self.creep.build(target)
             if result != OK:
-                print("[{}] Unknown result from creep.upgradeController({}): {}".format(
-                    self.creep.name, target, result))
+                print("[{}] Unknown result from creep.upgradeController({}): {}".format(self.creep.name, target, result))
             # Let the creeps get a little bit closer than required to the controller, to make room for other creeps.
             if not self.creep.pos.inRangeTo(target, 2):
                 self.creep.moveTo(target)
